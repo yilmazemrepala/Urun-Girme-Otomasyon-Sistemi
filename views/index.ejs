@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Ürün Girme Otomasyon Sistemi</title>
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+			crossorigin="anonymous" />
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+		<link rel="stylesheet" href="../css/style.css" />
+
+		<!-- Sonra kaldıracağız -->
+		<style>
+			.title {
+				color: #fff;
+			}
+
+			.file-upload {
+				background-color: #f8f9fa;
+				width: 300px;
+			}
+
+			.file-upload-content {
+				display: none;
+				text-align: center;
+			}
+
+			.file-upload-input {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				outline: none;
+				opacity: 0;
+				cursor: pointer;
+			}
+
+			.image-upload-wrap {
+				border: 4px dashed #1fb264;
+				position: relative;
+			}
+
+			.image-dropping,
+			.image-upload-wrap:hover {
+				background-color: #1fb264;
+				border: 4px dashed #ffffff;
+			}
+
+			.image-title-wrap {
+				padding: 0 15px 15px 15px;
+				color: #222;
+			}
+
+			.drag-text {
+				text-align: center;
+			}
+
+			.drag-text h3 {
+				font-size: 20px;
+				font-weight: 10;
+				text-transform: uppercase;
+				color: #15824b;
+				padding: 85px 10px;
+			}
+
+			.file-upload-image {
+				max-height: 200px;
+				max-width: 200px;
+				margin: auto;
+			}
+
+			.remove-image {
+				width: 200px;
+				margin: 0;
+				color: #fff;
+				background: #cd4535;
+				border: none;
+				padding: 10px;
+				border-radius: 4px;
+				border-bottom: 4px solid #b02818;
+				transition: all 0.2s ease;
+				outline: none;
+				text-transform: uppercase;
+				font-weight: 100;
+			}
+
+			.remove-image:hover {
+				background: #c13b2a;
+				color: #ffffff;
+				transition: all 0.2s ease;
+				cursor: pointer;
+			}
+
+			.remove-image:active {
+				border: 0;
+				transition: all 0.2s ease;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!-- NAVBAR -->
+		<nav class="navbar navbar-expand-sm bg-secondary bg-opacity-50">
+			<div class="container-fluid d-flex mx-3">
+				<h2 class="title">Ürün Girme Otomasyon Sistemi</h2>
+				<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+					<button
+						method="POST"
+						onclick="addData()"
+						class="btn btn-outline-success btn-lg"
+						type="submit">
+						Kaydet
+					</button>
+				</div>
+			</div>
+		</nav>
+
+		<!-- --------------------------------------------------------------------------------------------- -->
+
+		<!-- Product and service description -->
+		<section>
+			<h4 class="ms-4 mt-4">Ürün ve Hizmet Tanımı</h4>
+			<div class="ms-4 me-4 p-3 bg-light text-black rounded">
+				<form class="row" action="/addData" id="addProduct" method="post">
+					<div class="col-md-6">
+						<label class="form-label">Ürün Adı</label>
+						<input
+							class="form-control"
+							type="text"
+							name="productName"
+							id="productName"
+							placeholder="Ürünün Başlığını Giriniz..."
+							required />
+					</div>
+					<div class="col-md-6">
+						<label class="form-label"> Ürün Tipi</label>
+						<select class="form-select" name="productType">
+							<option selected>Stoklu ürün</option>
+							<option>Stoksuz Ürün (Hizmet/Danışmanlık)</option>
+						</select>
+					</div>
+					<div class="col-md-6 mt-3">
+						<label class="form-label">Ürün Açıklaması</label>
+						<textarea
+							class="form-control"
+							placeholder="Ürünün açıklamasını giriniz..."
+							name="productDescription"
+							id="productDescription"
+							rows="9"></textarea>
+					</div>
+					<script
+						class="jsbin"
+						src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+					<div class="col-md-3">
+						<label class="form-label mt-3">Ürün Fotoğrafı</label>
+						<div class="file-upload">
+							<div class="image-upload-wrap">
+								<input
+									class="file-upload-input"
+									name="productImage"
+									type="file"
+									onchange="readURL(this);"
+									accept="image/*"
+									required />
+								<div class="drag-text">
+									<h3>Fotoğraf YÜKLEMEK İÇİN TIKLAYINIZ</h3>
+								</div>
+							</div>
+							<div class="file-upload-content">
+								<img class="file-upload-image" src="#" alt="your image" />
+								<div class="image-title-wrap mt-3">
+									<button
+										type="button"
+										onclick="removeUpload()"
+										class="remove-image">
+										Kaldır
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mt-3">
+						<di class="row">
+							<div class="col-md-12">
+								<label class="form-label">Marka</label>
+								<input
+									class="form-control"
+									type="text"
+									placeholder="Marka giriniz..."
+									name="brand"
+									id="brand"
+									required />
+
+								<div class="col-md-12 mt-3">
+									<label class="form-label">Stok Adedi</label>
+									<input
+										class="form-control"
+										placeholder="Ürün stok durumunu giriniz..."
+										type="number"
+										name="stock"
+										id="stock"
+										required />
+								</div>
+							</div>
+						</di>
+					</div>
+				</form>
+			</div>
+		</section>
+
+		<!-- --------------------------------------------------------------------------------------------- -->
+
+		<!-- Pricing -->
+		<section>
+			<h4 class="ms-4 mt-4">Fiyatlandırma</h4>
+			<div class="ms-4 me-4 p-3 bg-light text-black rounded">
+				<form class="row" action="/addData" method="post" id="addPrice">
+					<div class="col-md-3 mt-3">
+						<label class="form-label"> Satış Fiyatı</label>
+						<input
+							class="form-control"
+							type="number"
+							placeholder="Ürünün fiyatını giriniz..."
+							name="price"
+							id="price"
+							required />
+					</div>
+					<div class="col-md-1 mt-3">
+						<label>Para Birimi</label>
+						<select class="form-select mt-2" name="currency" id="currency">
+							<option selected>TL</option>
+							<option>Dolar</option>
+							<option>Euro</option>
+						</select>
+					</div>
+					<div class="col-md-1 mt-3">
+						<label class="form-label">
+							KDV Oranı <i class="bi bi-percent"></i
+						></label>
+						<input
+							class="form-control"
+							type="number"
+							value="18"
+							name="vatRate"
+							id="vatRate"
+							required />
+					</div>
+				</form>
+			</div>
+		</section>
+
+		<!-- Dummy form -->
+		<form
+			id="mergedForm"
+			style="display: none"
+			action="/addData"
+			method="post"></form>
+
+		<!-- --------------------------------------------------------------------------------------------- -->
+		<footer
+			class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top px-5">
+			<div class="col-md-4 d-flex align-items-center">
+				<li class="list-unstyled">
+					<a
+						href="/"
+						class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
+					</a>
+					<span class="mb-3 mb-md-0 text-muted">
+						© Development by Yilmaz Emre Pala</span
+					>
+				</li>
+			</div>
+
+			<ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+				<li class="ms-3">
+					<a
+						class="text-muted text-decoration-none"
+						href="https://www.linkedin.com/in/yilmazemrepala/"
+						target="_blank">
+						Linkedin <i class="bi bi-linkedin"></i
+					></a>
+				</li>
+				<li class="ms-3">
+					<a
+						class="text-muted text-decoration-none"
+						href="https://github.com/yilmazemrepala"
+						target="_blank">
+						GitHub <i class="bi bi-github"></i>
+					</a>
+				</li>
+			</ul>
+		</footer>
+
+		<script src="/helpers/ui.js"></script>
+		<script src="app.js"></script>
+		<script
+			class="jsbin"
+			src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+			crossorigin="anonymous"></script>
+	</body>
+</html>
